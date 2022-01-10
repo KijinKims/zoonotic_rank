@@ -50,6 +50,9 @@ parser$add_argument("out", type = "character",
                                  "(TreeSHAP) values for each feature in across models. Clusters can",
                                  "be identified in this file as all viruses sharing the same exemplar."))
 
+parser$add_argument("--script_path", type = "character",
+                    help = "the directory path where zoonotic rank cloned repository exists.")
+
 parser$add_argument("--exclude", type = "character",
 										help = paste("Comma-separated list of viruses which should NOT be present in",
 																 "the training data of models used for prediction. Names should",
@@ -109,7 +112,8 @@ USE_DERIVED_FEATURES <- TRUE  					# Whether derived (mimicry) features should b
 MODEL_TYPE <- "xgbTree"       					# Type of model used in this run
 
 
-ROOT_DIR <- find_rstudio_root_file()
+#ROOT_DIR <- find_rstudio_root_file()
+ROOT_DIR <- "/root/zoonotic_rank"
 genome_feature_script <- file.path(ROOT_DIR, "Utils", "GenomeFeatures.py")
 
 source(file.path(ROOT_DIR, "Utils", "cds_parser.R"))
@@ -120,7 +124,7 @@ source(file.path(ROOT_DIR, 'Utils', 'calibration_utils.R'))
 source(file.path(ROOT_DIR, 'Utils', 'rundata_utils.R'))
 
 if (USE_DERIVED_FEATURES)
-	source(file.path('Utils', 'derived_genome_feature_utils.R'))
+	source(file.path(ROOT_DIR, 'Utils', 'derived_genome_feature_utils.R'))
 
 
 # Trained models:
@@ -157,10 +161,10 @@ trainingFeatures <- file.path(ROOT_DIR, "CalculatedData", "GenomicFeatures-Virus
 
 if (USE_DERIVED_FEATURES) {
 	# Data needed to calculate derived features:
-	humanFeatures <- readRDS(file.path('CalculatedData', 'GenomicFeatures-HumanCombined.rds'))
+	humanFeatures <- readRDS(file.path(ROOT_DIR, 'CalculatedData', 'GenomicFeatures-HumanCombined.rds'))
 	
 	# Data needed to identify training viruses by feature value:
-	virusDistFeatures <- readRDS(file.path('CalculatedData', 'GenomicFeatures-Distances.rds'))
+	virusDistFeatures <- readRDS(file.path(ROOT_DIR, 'CalculatedData', 'GenomicFeatures-Distances.rds'))
 	trainingFeatures <- trainingFeatures %>% 
 		left_join(virusDistFeatures, by = c('UniversalName', 'Strain'))
 }
