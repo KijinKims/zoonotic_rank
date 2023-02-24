@@ -113,7 +113,7 @@ MODEL_TYPE <- "xgbTree"       					# Type of model used in this run
 
 
 #ROOT_DIR <- find_rstudio_root_file()
-ROOT_DIR <- "/root/zoonotic_rank"
+ROOT_DIR <- "/home/user/custom_scripts/zoonotic_rank"
 genome_feature_script <- file.path(ROOT_DIR, "Utils", "GenomeFeatures.py")
 
 source(file.path(ROOT_DIR, "Utils", "cds_parser.R"))
